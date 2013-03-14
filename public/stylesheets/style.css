@@ -1,0 +1,78 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial;
+  font-size: 14px;
+  color: #fff;
+  overflow-y: auto;
+  background-color: #3e3e3e;
+  min-height: 100%;
+  width: 100%;
+}
+#headerTopBack {
+  position: absolute;
+  z-index: 10;
+  top: 0px;
+  width: 100%;
+  height: 40px;
+  background-color: #242424;
+}
+#mainSubject {
+  position: absolute;
+  z-index: 20;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  height: 100%;
+  margin: 0px 30px;
+}
+#subjectHeader {
+  position: absolute;
+  top: 40px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  height: 140px;
+}
+#subjectBody {
+  position: absolute;
+  top: 180px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+}
+.threeColumns {
+  position: absolute;
+  top: 0;
+  bottom: 30px;
+}
+#firstColumn {
+  left: 0;
+  right: 67%;
+  background: #343434;
+  border-radius: 10px 0px 0px 10px;
+}
+#themeTools {
+  position: absolute;
+  top: 0;
+  height: 30px;
+  width: 100%;
+}
+#themesList {
+  position: absolute;
+  top: 30px;
+  bottom: 0px;
+  width: 100%;
+}
+#secondColumn {
+  left: 33%;
+  right: 34%;
+  background: #5a5a5a;
+}
+#thirdColumn {
+  left: 66%;
+  right: 0px;
+  background: #9f9f9f;
+  border-radius: 0px 10px 10px 0px;
+}
