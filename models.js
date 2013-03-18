@@ -13,45 +13,45 @@ var mongoose = require('mongoose')
  * Schema definition
  */
 
-var Subject = new Schema({
+var MaterialSchema = new Schema({
     name      : String
-    , children   : [Theme]
 });
 
-var Theme = new Schema({
+var SubthemeSchema = new Schema({
     name      : String
-    , children   : [Subtheme]
+    , children   : [MaterialSchema]
 });
 
-var Subtheme = new Schema({
+var ThemeSchema = new Schema({
     name      : String
-    , children   : [Material]
+    , children   : [SubthemeSchema]
 });
 
-var Material = new Schema({
+var SubjectSchema = new Schema({
     name      : String
+    , children   : [ThemeSchema]
 });
 
 /**
  * Models
  */
 
-mongoose.model('Subject', Subject);
+mongoose.model('Subject', SubjectSchema);
 exports.Subject = function(db) {
     return db.model('Subject');
 };
 
-mongoose.model('Theme', Theme);
+mongoose.model('Theme', ThemeSchema);
 exports.Theme = function(db) {
     return db.model('Theme');
 };
 
-mongoose.model('Subtheme', Subtheme);
+mongoose.model('Subtheme', SubthemeSchema);
 exports.Subtheme = function(db) {
     return db.model('Subtheme');
 };
 
-mongoose.model('Material', Material);
+mongoose.model('Material', MaterialSchema);
 exports.Material = function(db) {
     return db.model('Material');
 };

@@ -97,7 +97,7 @@ function post_theme(req, res, next) {
         }
 
         newTheme = new Theme({ name: req.body.name });
-        newTheme.save();
+//        newTheme.save();
         subject.children.push(newTheme);
         subject.save();
 
@@ -108,30 +108,23 @@ function post_theme(req, res, next) {
 }
 
 function delete_theme(req, res, next) {
-/*    var _id = req.params._id,
-    removeTheme = function(err, theme) {
-        if (err) {
-            return console.log(err.stack);
-        }
-        res.send(theme);
+
+    removeTheme = function(err, subj1){
+
+        subj1.children.id(req.params._id).remove();
+        subj1.save(function(err, subj2){
+            if(err){
+                console.log(err);
+            }
+            else {
+                console.log('subject should be saved');
+                res.send();
+            }
+        });
+
     }
 
-    Theme.findByIdAndRemove( _id, removeTheme)*/
-
-    Theme.findById(req.params._id, function (err, result) {
-        if (err) {
-            res.send(console.log(err));
-        } else {
-            result.remove();
-            result.save(function (err) {
-                if (!err) {
-                    res.send({});
-                } else {
-                    res.send(console.log(err));
-                }
-            });
-        }
-    });
+    Subject.findOne({}, removeTheme);
 }
 
 // Routes
