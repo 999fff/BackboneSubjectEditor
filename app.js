@@ -6,12 +6,13 @@
 
 // Database
 
-var mongoose = require('mongoose')
-    , db = mongoose.connect('mongodb://localhost/subjEditor')
-    , Subject = require('./models.js').Subject(db)
-    , Theme = require('./models.js').Theme(db)
-    , Subtheme = require('./models.js').Subtheme(db)
-    , Material = require('./models.js').Material(db);
+var mongoskin = require('mongoskin')
+    ,skin = mongoskin.db('localhost:27017/subjEditor')
+    ,Subjects = skin.collection('subjects');
+
+
+var Subject = require('./models.js').Subject
+    , Theme = require('./models.js').Theme;
 
 // Express config
 
@@ -63,15 +64,17 @@ function get_subject(req, res, next) {
         }
     };
 
-    Subject.findOne({}, sendSubject);
+    Subjects.findOne({}, sendSubject);
 }
 
 function get_theme(req, res, next) {
-    var sendTheme = function(err, themeList) {
+
+    var sendTheme = function(err, subject) {
         if (err) {
             return console.log(err.stack);
         }
 
+        var themeList = subject.children;
         if(themeList) {
             console.log('Themes will be fetched');
             res.send(themeList);
@@ -82,49 +85,24 @@ function get_theme(req, res, next) {
     };
 
     if('_id' in req.params) {
-        Theme.findOne({'_id': req.params._id}, sendTheme);
+        Subjects.findOne({}, {children: {$elemMatch: { _id: skin.toId(req.params._id)}}}, sendTheme);
     } else {
-        Theme.find({}, sendTheme);
+        Subjects.findOne({}, sendTheme);
     }
 }
 
 function post_theme(req, res, next) {
-    var saveTheme = function(err, subject) {
-        if (err) {
-            return console.log(err.stack);
-        } else if(!subject) {
-            return console.log(err.stack);
-        }
 
-        newTheme = new Theme({ name: req.body.name });
-//        newTheme.save();
-        subject.children.push(newTheme);
-        subject.save();
-
-        res.send(newTheme);
-    }
-
-    Subject.findOne({_id: req.body.parent}, saveTheme)
+    var newTheme = new Theme();
+    newTheme.name = req.body.name;
+    Subjects.update({}, {$push: {"children": newTheme}}, function(err, obj) {
+        res.send(newTheme)});
 }
 
 function delete_theme(req, res, next) {
 
-    removeTheme = function(err, subj1){
-
-        subj1.children.id(req.params._id).remove();
-        subj1.save(function(err, subj2){
-            if(err){
-                console.log(err);
-            }
-            else {
-                console.log('subject should be saved');
-                res.send();
-            }
-        });
-
-    }
-
-    Subject.findOne({}, removeTheme);
+    Subjects.update({}, {$pull: {"children":{ }}}, function(err, obj) {
+        res.send()});
 }
 
 // Routes
